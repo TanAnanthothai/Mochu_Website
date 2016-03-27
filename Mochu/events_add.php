@@ -1,37 +1,16 @@
 <!DOCTYPE html>
 <?php
-	include 'includes/db.php';
-	if(isset($_GET['edit_id'])) {
-		$edit_sql = "SELECT * FROM Events WHERE user_ID = '$_GET[edit_id]'";
-		$run_sql = mysqli_query($conn,$edit_sql);
-
-		while ($rows = mysqli_fetch_assoc($run_sql)) {
-			$event_ID=$rows['event_ID'];
-			$name=$rows['name'];
-			$start_time=$rows['start_time'];
-			$Edate=$rows['Edate'];
-			$end_time=$rows['end_time'];
-			$contact=$rows['contact'];
-			$organizer=$rows['organizer'];
-			$picture=$rows['picture'];
-			$type=$rows['type'];
-			$description=$rows['description'];
-			$loc_ID=$rows['loc_ID'];
-		} 
-
-	}else{
-			$event_ID='';
-			$name='';
-			$start_time='';
-			$Edate='';
-			$end_time='';
-			$contact='';
-			$organizer='';
-			$picture='';
-			$type='';
-			$description='';
-			$loc_ID='';
-	}
+	$event_ID='';
+	$name='';
+	$start_time='';
+	$Edate='';
+	$end_time='';
+	$contact='';
+	$organizer='';
+	$picture='';
+	$type='';
+	$description='';
+	$loc_ID='';
 ?>
 
 
@@ -51,7 +30,7 @@
 		<div class="container">
 			<h1>Submit Form</h1>
 			<form class="form-horizontal" action="events.php" method="post" role="form">
-
+				
 				<div class="form-group">
 					<label for="name" class="control-label col-sm-2">Event Name*</label>
 					<div class="col-sm-5">
@@ -102,7 +81,7 @@
 				</div>
 
 				<div class="form-group">
-					<label for="type" class="control-label col-sm-2">Organizer*</label>
+					<label for="type" class="control-label col-sm-2">Type*</label>
 					<div class="col-sm-5">
 						<input type="text" id="type" class="form-control" value="<?php echo $type; ?>" placeholder="Update choices" name="type" required>
  					</div>
@@ -121,12 +100,12 @@
 						<input type="text" id="loc_ID" class="form-control" value="<?php echo $loc_ID; ?>" placeholder="Update" name="loc_ID" required>
  					</div>
 				</div>
-
+			
 				<div class="form-group">
 					<label class="control-label col-sm-2"></label>	
 					<div class="col-sm-5">
-						<input type="submit" class="btn btn-default btn-block" name="edit_form" value="Submit form">
-						<input name="event_ID" type="hidden" id="event_ID" value="<?=$_GET['edit_id']?>" />
+						<input type="submit" class="btn btn-default btn-block" name="submit_form" value="Submit form">
+
 					</div>
 				</div>
 			</form>

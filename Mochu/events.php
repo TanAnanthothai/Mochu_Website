@@ -12,6 +12,47 @@ if(isset($_GET['del_id'])){
 	$run_sql = mysqli_query($conn,$del_sql);
 }
 
+/////Add Rows /////
+	if(isset($_POST['submit_form'])){
+		$name=strip_tags($_POST['name']);
+		$start_time=strip_tags($_POST['start_time']);
+		$Edate=strip_tags($_POST['Edate']);
+		$end_time=strip_tags($_POST['end_time']);
+		$contact=strip_tags($_POST['contact']);
+		$organizer=strip_tags($_POST['organizer']);
+		$picture=strip_tags($_POST['picture']);
+		$type=strip_tags($_POST['type']);
+		$description=strip_tags($_POST['description']);
+		$loc_ID=strip_tags($_POST['loc_ID']);
+
+		$ins_sql = "INSERT INTO Events (name, start_time, Edate, end_time, contact, organizer, picture, type, description, loc_ID) 
+					VALUES ('$name', '$start_time', '$Edate', '$end_time', '$contact', '$organizer', '$picture', '$type', '$description', '$loc_ID',)" ;
+		$run_sql = mysqli_query($conn, $ins_sql);
+		header("Location:events.php");
+	}else{
+		echo "this doesn't work";
+	}
+
+/////Edit Rows /////
+	if( (isset($_POST['edit_form']) )){
+		$name=strip_tags($_POST['name']);
+		$start_time=strip_tags($_POST['start_time']);
+		$Edate=strip_tags($_POST['Edate']);
+		$end_time=strip_tags($_POST['end_time']);
+		$contact=strip_tags($_POST['contact']);
+		$organizer=strip_tags($_POST['organizer']);
+		$picture=strip_tags($_POST['picture']);
+		$type=strip_tags($_POST['type']);
+		$description=strip_tags($_POST['description']);
+		$loc_ID=strip_tags($_POST['loc_ID']);
+		//$ins_sql = "INSERT INTO AudioGuide (au_name, au_file, fl_IMG) VALUES ('$name', '$au_file', '$fl_IMG')" ;
+		$ins_sql = "UPDATE Events SET name='$name', start_time='$start_time', Edate='$Edate', end_time='$end_time', contact='$contact', 
+					organizer='$organizer', picture='$picture', type='$type', description='$description', loc_ID='$loc_ID' WHERE event_ID = '$event_ID' ";
+		$run_sql = mysqli_query($conn, $ins_sql);
+		header("Location:events.php");
+	}else{
+		echo "this doesn't work";
+	}
 
 ?>
 <html>
@@ -83,8 +124,7 @@ if(isset($_GET['del_id'])){
 									<td>'.$rows['contact'].'</td>
 									<td>'.$rows['organizer'].'</td>
 									<td><a class="btn btn-info" href="events_detail.php?detail_id='.$rows['event_ID'].'">More Detail</a></td>
-							
-									<td><a class="btn btn-danger" href="audioGuide.php?del_id='.$rows['event_ID'].'">Delete</a></td>
+									<td><a class="btn btn-danger" href="events.php?del_id='.$rows['event_ID'].'">Delete</a></td>
 								</tr>
 								';
 							}
@@ -92,7 +132,7 @@ if(isset($_GET['del_id'])){
 
 						</tbody>
 					</table>
-					<!-- <td><a class="btn btn-info" href="newAdd_audioGuide.php">Add new Events</a></td> -->	
+					<td><a class="btn btn-info" href="events_add.php">Add New Event</a></td>	
 				</div>
 			</div>
 		</div>

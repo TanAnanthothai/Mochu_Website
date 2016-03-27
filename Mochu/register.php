@@ -52,8 +52,12 @@ if(isset($_POST['register'])){
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
     $token= bin2hex(openssl_random_pseudo_bytes(32));
-    $query = "INSERT INTO Users (Fname, email, password, token) values ('$Fname', '$email', '$password', '$token') ";
+    $query = "INSERT INTO Users (Fname,email,password,Lname,gender,contact,Bday,last_login) VALUES ('$Fname', '$email', '$password', '$Lname', 
+             '$gender', '$contact','$Bday', '$last_login')" ;
+
     $conn-> query($query);
+    $_SESSION['user_email'] = $email;
+    header("Location:myaccount.php");
   }
   
 }
@@ -98,10 +102,17 @@ if(isset($_POST['register'])){
           <div class="alert alert-danger"> <?php echo $_GET['err']; ?></div>
      <?php } ?>
       <hr>
+
      <div class="form-group">
         <label>First Name</label>
-        <input name="Fname" class="form-control" placeholder="Fname" value="<?php echo @$_SESSION['Fname']; ?>" required> 
+        <input name="Fname" class="form-control" placeholder="Enter your first name" value="<?php echo @$_SESSION['Fname']; ?>" required> 
       </div>
+
+      <div class="form-group">
+        <label>Last Name</label>
+        <input name="Lname" class="form-control" placeholder="Enter your last name" value="<?php echo @$_SESSION['Lname']; ?>" required> 
+      </div>
+
       <div class="form-group">
         <label for="exampleInputEmail1">Email address</label>
         <input type="email" name="email" class="form-control" placeholder="Email" value="<?php echo @$_SESSION['email']; ?>" required>
@@ -114,7 +125,24 @@ if(isset($_POST['register'])){
         <label for="exampleInputPassword1">Confirm Password</label>
         <input type="password" name="confirm_password" class="form-control" id="exampleInputPassword1" placeholder="Confirm Password" value="<?php echo @$_SESSION['confirm_password']; ?>" required>
       </div>
-      <button type="submit" name="register" class="btn btn-default">Register</button>
+
+      <div class="form-group">
+        <label>Gender</label>
+        <input name="gender" class="form-control" placeholder="Male/Female" value="<?php echo @$_SESSION['gender']; ?>" required> 
+      </div>
+
+      <div class="form-group">
+        <label>Contact</label>
+        <input name="contact" class="form-control" placeholder="08XXXXXXXX" value="<?php echo @$_SESSION['contact']; ?>" required> 
+      </div>
+
+      <div class="form-group">
+        <label>Birthday</label>
+        <input name="Bday" class="form-control" placeholder="YYYY-MM-DD" value="<?php echo @$_SESSION['Bday']; ?>" required> 
+      </div>
+
+
+      <button type="submit" name="register" class="btn btn-default" >Register</button>
     </form>
 
   </div><!-- /.container -->

@@ -20,7 +20,7 @@
 		$run_sql = mysqli_query($conn, $ins_sql);
 		header("Location:audioGuide.php");
 	}else{
-		echo "this doesnt work";
+		echo "this doesn't work";
 	}
 
 	/////Edit Rows /////
@@ -34,7 +34,7 @@
 		$run_sql = mysqli_query($conn, $ins_sql);
 		header("Location:audioGuide.php");
 	}else{
-		echo "this doesnt work";
+		echo "this doesn't work";
 	}
 	
 
@@ -91,6 +91,7 @@
 							<th>edit</th>
 							<th>delete</th>
 						</thead>
+
 						<tbody>
 							<?php 
 							$sql = "SELECT * FROM AudioGuide";

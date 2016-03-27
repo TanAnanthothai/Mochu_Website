@@ -3,8 +3,7 @@
 	$au_name = '';
 	$au_file = '';
 	$fl_IMG = '';
-	$del_sql = "DELETE FROM AudioGuide WHERE au_ID = '$_GET[del_id]' ";
-	$run_sql = mysqli_query($conn,$del_sql);
+	
 ?>
 
 

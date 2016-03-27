@@ -14,7 +14,7 @@
 	
 				<div class="jumbotron">
 					<?php
-						$sql = "SELECT * FROM Events WHERE Events.event_ID='$_GET[detail_id]'";
+						$sql = "SELECT * FROM Events WHERE event_ID='$_GET[detail_id]'";
 						$run_sql = mysqli_query($conn,$sql);
 						while($rows = mysqli_fetch_assoc($run_sql)){
 								echo '
@@ -29,9 +29,10 @@
 					
 				</div>
 
-				<div class="col-md-12">
+				<div class="col-md-16">
 					<table class="table table-striped table-hover">
 						<thead> 
+						<tr>
 							<th>event_ID</th>
 							<th>name</th>
 							<th>start_time</th>
@@ -42,12 +43,20 @@
 							<th>picture</th>
 							<th>type</th>
 							<th>description</th>
+						</tr>
+						<tr>
 							<th>loc_ID</th>
+							<th>loc_name</th>
+							<th>total_seats</th>
+							<th>room_no</th>
+							<th>fl_no</th>
+							<th>bldg</th>
+						</tr>
 							
 						</thead>
 						<tbody>
 							<?php 
-							$sql = "SELECT * FROM Events WHERE Events.event_ID='$_GET[detail_id]'";
+							$sql = "SELECT * FROM Events e, Locations l WHERE e.loc_ID=l.loc_ID AND event_ID='$_GET[detail_id]'";
 							$run_sql = mysqli_query($conn,$sql);
 							while($rows = mysqli_fetch_assoc($run_sql)){
 								echo '
@@ -62,15 +71,21 @@
 									<td>'.$rows['picture'].'</td>
 									<td>'.$rows['type'].'</td>
 									<td>'.$rows['description'].'</td>
+								</tr>
+								<tr>
 									<td>'.$rows['loc_ID'].'</td>
-
+									<td>'.$rows['loc_name'].'</td>
+									<td>'.$rows['total_seats'].'</td>
+									<td>'.$rows['room_no'].'</td>
+									<td>'.$rows['fl_no'].'</td>
+									<td>'.$rows['bldg'].'</td>
 								</tr>
 								';
 							} ?>
 			 
 						</tbody>
 					</table>
-					<a href="events_detail_edit.php?edit_id='.$rows['q_ID'].'" class="btn btn-warning">Edit Events Details</a>
+					<a href="events_detail_edit.php?edit_id='.$rows['event_ID'].'" class="btn btn-warning">Edit Events Details</a>
 				</div>
 				
 	

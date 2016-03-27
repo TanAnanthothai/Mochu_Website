@@ -8,15 +8,52 @@ if(isset($_SESSION['user_email'])){
 
 /////DELETE Rows /////
 if(isset($_GET['del_id'])){
-	$del_sql = "DELETE FROM Users WHERE id = '$_GET[del_id]' ";
+	$del_sql = "DELETE FROM Users WHERE user_ID = '$_GET[del_id]' ";
 	$run_sql = mysqli_query($conn,$del_sql);
 }
+
+/////Add Rows /////
+	if(isset($_POST['submit_form'])){
+		$Fname = strip_tags($_POST['Fname']);
+		$email = strip_tags($_POST['email']);
+		$Lname = strip_tags($_POST['Lname']);
+		$gender = strip_tags($_POST['gender']);
+		$contact = strip_tags($_POST['contact']);
+		$Bday = strip_tags($_POST['Bday']);
+		$last_login = strip_tags($_POST['last_login']);
+
+		$ins_sql = "INSERT INTO Users (Fname,email,Lname,gender,contact,Bday,last_login) VALUES ('$Fname', '$email', '$Lname', '$gender', '$contact',
+				   '$Bday', '$last_login')" ;
+		$run_sql = mysqli_query($conn, $ins_sql);
+		header("Location:users.php");
+	}else{
+		echo "this doesn't work";
+	}
+
+	/////Edit Rows /////
+	if( (isset($_POST['edit_form']) )){
+		$user_ID = strip_tags($_POST['user_ID']);
+		$Fname = strip_tags($_POST['Fname']);
+		$email = strip_tags($_POST['email']);
+		$Lname = strip_tags($_POST['Lname']);
+		$gender = strip_tags($_POST['gender']);
+		$contact = strip_tags($_POST['contact']);
+		$Bday = strip_tags($_POST['Bday']);
+		$last_login = strip_tags($_POST['last_login']);
+		//$ins_sql = "INSERT INTO AudioGuide (au_name, au_file, fl_IMG) VALUES ('$name', '$au_file', '$fl_IMG')" ;
+		$ins_sql = "UPDATE Users SET Fname='$Fname', email='$email', Lname='$Lname', gender='$gender', contact='$contact', Bday='$Bday',
+					last_login='$last_login' WHERE user_ID = '$user_ID' " ;
+		$run_sql = mysqli_query($conn, $ins_sql);
+		header("Location:users.php");
+	}else{
+		echo "this doesn't work";
+	}
 
 
 ?>
 <html>
 <head>
-	<title> Events </title>
+	<title> Users </title>
 	<script src="js/jquery.js"> </script>
 	<script src="bootstrap/js/bootstrap.js"> </script>
 	<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
@@ -66,9 +103,10 @@ if(isset($_GET['del_id'])){
 							<th>contact</th>
 							<th>Bday</th>
 							<th>last_login</th>
-						
-						
+							<th>edit</th>
+							<th>delete</th>
 						</thead>
+
 						<tbody>
 							<?php 
 							$sql = "SELECT * FROM Users";
@@ -78,12 +116,14 @@ if(isset($_GET['del_id'])){
 								<tr> 
 									<td>'.$rows['user_ID'].'</td>
 									<td>'.$rows['Fname'].'</td>
-									<td>'.$rows['email'].'</td>
 									<td>'.$rows['Lname'].'</td>
+									<td>'.$rows['email'].'</td>
 									<td>'.$rows['gender'].'</td>
 									<td>'.$rows['contact'].'</td>
 									<td>'.$rows['Bday'].'</td>
 									<td>'.$rows['last_login'].'</td>
+									<td><a class="btn btn-warning" href="users_edit.php?edit_id='.$rows['user_ID'].'">Edit</a></td>
+									<td><a class="btn btn-danger" href="users.php?del_id='.$rows['user_ID'].'">Delete</a></td>
 								</tr>
 								';
 							}
@@ -91,7 +131,8 @@ if(isset($_GET['del_id'])){
 
 						</tbody>
 					</table>
-					<!-- <td><a class="btn btn-info" href="newAdd_audioGuide.php">Add new Events</a></td> -->	
+					<td><a class="btn btn-info" href="users_add.php">Add New User</a></td>	
+					
 				</div>
 			</div>
 		</div>
