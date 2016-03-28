@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 27, 2016 at 04:56 AM
+-- Generation Time: Mar 28, 2016 at 03:33 PM
 -- Server version: 5.5.46-0ubuntu0.14.04.2
 -- PHP Version: 5.5.9-1ubuntu4.13
 
@@ -174,6 +174,19 @@ CREATE TABLE IF NOT EXISTS `Filters` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `Interested_In`
+--
+
+CREATE TABLE IF NOT EXISTS `Interested_In` (
+  `user_ID` int(11) NOT NULL,
+  `interest_ID` int(11) NOT NULL,
+  PRIMARY KEY (`user_ID`,`interest_ID`),
+  KEY `interest_ID` (`interest_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `Interests`
 --
 
@@ -219,6 +232,58 @@ CREATE TABLE IF NOT EXISTS `Managers` (
   `user_ID` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`user_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Manage_Audio`
+--
+
+CREATE TABLE IF NOT EXISTS `Manage_Audio` (
+  `au_ID` int(11) NOT NULL,
+  `user_ID` int(11) NOT NULL,
+  KEY `user_ID` (`user_ID`),
+  KEY `au_ID` (`au_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Manage_Contents`
+--
+
+CREATE TABLE IF NOT EXISTS `Manage_Contents` (
+  `content_ID` int(11) NOT NULL,
+  `user_ID` int(11) NOT NULL,
+  PRIMARY KEY (`content_ID`,`user_ID`),
+  KEY `user_ID` (`user_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Manage_Events`
+--
+
+CREATE TABLE IF NOT EXISTS `Manage_Events` (
+  `event_ID` int(11) NOT NULL,
+  `user_ID` int(11) NOT NULL,
+  PRIMARY KEY (`event_ID`,`user_ID`),
+  KEY `user_ID` (`user_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Manage_Nisitify`
+--
+
+CREATE TABLE IF NOT EXISTS `Manage_Nisitify` (
+  `flt_ID` int(11) NOT NULL,
+  `user_ID` int(11) NOT NULL,
+  PRIMARY KEY (`flt_ID`,`user_ID`),
+  KEY `user_ID` (`user_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -288,6 +353,37 @@ INSERT INTO `Questions` (`q_ID`, `q_content`, `q_img`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `Reservations`
+--
+
+CREATE TABLE IF NOT EXISTS `Reservations` (
+  `rsv_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `atd_hist` tinyint(1) NOT NULL,
+  `Rdate` date NOT NULL,
+  `user_ID` int(11) NOT NULL,
+  PRIMARY KEY (`rsv_ID`),
+  KEY `user_ID` (`user_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Seat_Instance`
+--
+
+CREATE TABLE IF NOT EXISTS `Seat_Instance` (
+  `seat_no` int(11) NOT NULL AUTO_INCREMENT,
+  `status` tinyint(1) NOT NULL,
+  `rsv_ID` int(11) NOT NULL,
+  `event_ID` int(11) NOT NULL,
+  PRIMARY KEY (`seat_no`,`rsv_ID`),
+  KEY `event_ID` (`event_ID`),
+  KEY `rsv_ID` (`rsv_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `Users`
 --
 
@@ -309,7 +405,7 @@ CREATE TABLE IF NOT EXISTS `Users` (
   KEY `user_ID_2` (`user_ID`),
   KEY `user_ID_3` (`user_ID`),
   KEY `user_ID_5` (`user_ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `Users`
@@ -319,7 +415,8 @@ INSERT INTO `Users` (`user_ID`, `Fname`, `email`, `password`, `Lname`, `gender`,
 (1, 'Will', 'smithmith@ei.com', 'smithza', 'Smith', 'Male', '0876543210', '2000-02-04', '2016-03-27 04:50:21', 1, ''),
 (2, 'Teerakorn', 'taneiei@ei.com', 'gutanA', 'Jokmok', 'None', '0999999999', '1990-07-13', '2016-03-27 04:52:40', 1, ''),
 (3, 'TEERAKORN', 'teerakorn.a@gmail.com', '123456', '', '', '', '0000-00-00', '2016-03-27 05:33:20', 1, '7dff00d5232f279fbe2b009a50f7e972da6ecfb0418ea0bc3f'),
-(4, 'Saris', 'saris.oph@gmail.com', '12345', '', '', '', '0000-00-00', '2016-03-27 08:52:05', 1, '313102914059c982b1e2d9bb83276b5f1f23f084b33544c7bc');
+(4, 'Saris', 'saris.oph@gmail.com', '12345', '', '', '', '0000-00-00', '2016-03-27 08:52:05', 1, '313102914059c982b1e2d9bb83276b5f1f23f084b33544c7bc'),
+(5, 'hello', 'tangent_only@hotmail.com', '123456', '', '', '', '0000-00-00', '2016-03-27 09:05:49', 1, 'f1666c2b3482c2038abcf1b79c516823fc2758c264c7db5653');
 
 --
 -- Constraints for dumped tables
@@ -338,10 +435,45 @@ ALTER TABLE `Events`
   ADD CONSTRAINT `Events_ibfk_1` FOREIGN KEY (`loc_ID`) REFERENCES `Locations` (`loc_ID`);
 
 --
+-- Constraints for table `Interested_In`
+--
+ALTER TABLE `Interested_In`
+  ADD CONSTRAINT `Interested_In_ibfk_1` FOREIGN KEY (`user_ID`) REFERENCES `Users` (`user_ID`),
+  ADD CONSTRAINT `Interested_In_ibfk_2` FOREIGN KEY (`interest_ID`) REFERENCES `Interests` (`interest_ID`);
+
+--
 -- Constraints for table `Managers`
 --
 ALTER TABLE `Managers`
   ADD CONSTRAINT `Managers_ibfk_1` FOREIGN KEY (`user_ID`) REFERENCES `Users` (`user_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `Manage_Audio`
+--
+ALTER TABLE `Manage_Audio`
+  ADD CONSTRAINT `Manage_Audio_ibfk_2` FOREIGN KEY (`au_ID`) REFERENCES `AudioGuide` (`au_ID`),
+  ADD CONSTRAINT `Manage_Audio_ibfk_1` FOREIGN KEY (`user_ID`) REFERENCES `Users` (`user_ID`);
+
+--
+-- Constraints for table `Manage_Contents`
+--
+ALTER TABLE `Manage_Contents`
+  ADD CONSTRAINT `Manage_Contents_ibfk_1` FOREIGN KEY (`user_ID`) REFERENCES `Users` (`user_ID`),
+  ADD CONSTRAINT `Manage_Contents_ibfk_2` FOREIGN KEY (`content_ID`) REFERENCES `Contents` (`content_ID`);
+
+--
+-- Constraints for table `Manage_Events`
+--
+ALTER TABLE `Manage_Events`
+  ADD CONSTRAINT `Manage_Events_ibfk_1` FOREIGN KEY (`user_ID`) REFERENCES `Users` (`user_ID`),
+  ADD CONSTRAINT `Manage_Events_ibfk_2` FOREIGN KEY (`event_ID`) REFERENCES `Events` (`event_ID`);
+
+--
+-- Constraints for table `Manage_Nisitify`
+--
+ALTER TABLE `Manage_Nisitify`
+  ADD CONSTRAINT `Manage_Nisitify_ibfk_1` FOREIGN KEY (`user_ID`) REFERENCES `Users` (`user_ID`),
+  ADD CONSTRAINT `Manage_Nisitify_ibfk_2` FOREIGN KEY (`flt_ID`) REFERENCES `Filters` (`flt_ID`);
 
 --
 -- Constraints for table `Manage_Questions`
@@ -355,6 +487,19 @@ ALTER TABLE `Manage_Questions`
 --
 ALTER TABLE `Members`
   ADD CONSTRAINT `Members_ibfk_1` FOREIGN KEY (`user_ID`) REFERENCES `Users` (`user_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `Reservations`
+--
+ALTER TABLE `Reservations`
+  ADD CONSTRAINT `Reservations_ibfk_1` FOREIGN KEY (`user_ID`) REFERENCES `Users` (`user_ID`);
+
+--
+-- Constraints for table `Seat_Instance`
+--
+ALTER TABLE `Seat_Instance`
+  ADD CONSTRAINT `Seat_Instance_ibfk_2` FOREIGN KEY (`rsv_ID`) REFERENCES `Reservations` (`rsv_ID`),
+  ADD CONSTRAINT `Seat_Instance_ibfk_1` FOREIGN KEY (`event_ID`) REFERENCES `Events` (`event_ID`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
