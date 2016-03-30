@@ -2,7 +2,10 @@
 
 require 'Slim/Slim.php';
 
+
 $app = new Slim();
+
+
 
 /*
 ------------------------------------
@@ -13,6 +16,7 @@ $app->get('/', 'firstPage');
 $app->get('/users', 'getUsers');
 $app->get('/users/:user_ID','getUser');
 $app->post('/users', 'addUser');
+$app->post('/tests', 'addTest');
 $app->put('/users/:id', 'updateUser');
 $app->delete('/users/:id',	'deleteUser');
 $app->get('/events', 'getEvents');
@@ -27,9 +31,9 @@ connect with the database
 */
 function getConnection() {
 	$dbhost="localhost";
-	$dbuser="root";
-	$dbpass="";
-	$dbname="Mochu";
+	$dbuser="teerakornm_Mochu";
+	$dbpass="root";
+	$dbname="teerakornm_Mochu";
 	$dbh = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);	
 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	return $dbh;
@@ -38,6 +42,7 @@ function firstPage() {
 	echo 'Hello<br>';
 	echo '<a href="http://mochu.api-docs.io/"> Please refer to this Mochu API Doc</a>';
 }
+
 /*
 -----------
 Users API
@@ -51,7 +56,7 @@ function getUsers() {
 		$stmt = $db->query($sql);  
 		$users = $stmt->fetchAll(PDO::FETCH_OBJ);
 		$db = null;
-		echo '{"user": ' . json_encode($users) . '}';
+		echo json_encode($users);
 	} catch(PDOException $e) {
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}
@@ -75,20 +80,40 @@ function getUser($user_ID) {
 function addUser() {
 	error_log('addUser\n', 3, '/var/tmp/php.log');
 	$request = Slim::getInstance()->request();
-	$users = json_decode($request->getBody());
-	//$sql = "INSERT INTO wine (name, grapes, country, region, year, description) 
-	//VALUES (:name, :grapes, :country, :region, :year, :description)";
-	$sql = "INSERT INTO Users (Fname,email,Lname,gender,contact,Bday) VALUES (:Fname, :email, :Lname, :gender, :contact, :Bday)" ;
+	//$users = json_decode($request->getBody());
+	$Fname = $_POST['Fname'];
+	$Lname = $_POST['Lname'];
+	$gender = $_POST['gender'];
+	$sql = "INSERT INTO Users (Fname,Lname,gender) VALUES ('$Fname', '$Lname', '$gender')" ;
 
 	try {
 		$db = getConnection();
 		$stmt = $db->prepare($sql);  
-		$stmt->bindParam("Fname", $wine->Fname);
-		$stmt->bindParam("email", $wine->email);
-		$stmt->bindParam("Lname", $wine->Lname);
-		$stmt->bindParam("gender", $wine->gender);
-		$stmt->bindParam("contact", $wine->contact);
-		$stmt->bindParam("Bday", $wine->Bday);
+		$stmt->bindParam("Fname", $users->Fname);
+		$stmt->bindParam("Lname", $users->Lname);
+		$stmt->bindParam("gender", $users->gender);
+		$stmt->execute();
+		$users->id = $db->lastInsertId();
+		$db = null;
+		echo json_encode($users); 
+		//echo '{"Success":{"text":'. "POST success" .'}}'; 
+	} catch(PDOException $e) {
+		error_log($e->getMessage(), 3, '/var/tmp/php.log');
+		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
+}
+function addTest() {
+	error_log('addTest\n', 3, '/var/tmp/php.log');
+	$request = Slim::getInstance()->request();
+	$users = json_decode($request->getBody());
+	//$sql = "INSERT INTO wine (name, grapes, country, region, year, description) 
+	//VALUES (:name, :grapes, :country, :region, :year, :description)";
+	$sql = "INSERT INTO post (test) VALUES (:test)" ;
+
+	try {
+		$db = getConnection();
+		$stmt = $db->prepare($sql);  
+		$stmt->bindParam("test", $users->test);
 		$stmt->execute();
 		$users->id = $db->lastInsertId();
 		$db = null;
@@ -107,12 +132,12 @@ function updateUser($id) {
 	try {
 		$db = getConnection();
 		$stmt = $db->prepare($sql);  
-		$stmt->bindParam("Fname", $wine->Fname);
-		$stmt->bindParam("email", $wine->email);
-		$stmt->bindParam("Lname", $wine->Lname);
-		$stmt->bindParam("gender", $wine->gender);
-		$stmt->bindParam("contact", $wine->contact);
-		$stmt->bindParam("Bday", $wine->Bday);
+		$stmt->bindParam("Fname", $users->Fname);
+		$stmt->bindParam("email", $users->email);
+		$stmt->bindParam("Lname", $users->Lname);
+		$stmt->bindParam("gender", $users->gender);
+		$stmt->bindParam("contact", $users->contact);
+		$stmt->bindParam("Bday", $users->Bday);
 		$stmt->bindParam("user_ID", $user_ID);
 		$stmt->execute();
 		$db = null;
@@ -151,7 +176,7 @@ function getEvents() {
 		$stmt = $db->query($sql);  
 		$users = $stmt->fetchAll(PDO::FETCH_OBJ);
 		$db = null;
-		echo '{"event": ' . json_encode($users) . '}';
+		echo json_encode($users);
 	} catch(PDOException $e) {
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}
@@ -169,7 +194,7 @@ function getQuestions() {
 		$stmt = $db->query($sql);  
 		$users = $stmt->fetchAll(PDO::FETCH_OBJ);
 		$db = null;
-		echo '{"question": ' . json_encode($users) . '}';
+		echo json_encode($users);
 	} catch(PDOException $e) {
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}
@@ -186,7 +211,7 @@ function getAudioGuides() {
 		$stmt = $db->query($sql);  
 		$users = $stmt->fetchAll(PDO::FETCH_OBJ);
 		$db = null;
-		echo '{"audioGuide": ' . json_encode($users, JSON_UNESCAPED_SLASHES) . '}';
+		echo json_encode($users, JSON_UNESCAPED_SLASHES);
 	} catch(PDOException $e) {
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}
