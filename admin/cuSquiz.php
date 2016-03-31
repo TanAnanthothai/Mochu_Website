@@ -12,6 +12,18 @@
 		$run_sql = mysqli_query($conn,$del_sql);
 	}
 
+	///Add Rows /////
+	if(isset($_POST['submit_form'])){
+		$q_content = strip_tags($_POST['q_content']);
+		$q_img = strip_tags($_POST['q_img']);
+
+		$ins_sql = "INSERT INTO Questions (q_content, q_img) VALUES ('$q_content', '$q_img')" ;
+		$run_sql = mysqli_query($conn, $ins_sql);
+		header("Location:cuSquiz.php");
+	}else{
+		echo "this doesn't work";
+	}
+
 	/////Edit Rows /////
 	if( (isset($_POST['edit_form']) )){
 		$q_ID = strip_tags($_POST['q_ID']);
@@ -62,17 +74,17 @@
 
 	<div class="container-fluid" style="margin-top:100px">
 		<div class="row">
-		<div class="col-md-8 col-md-offset-2">
+		<div class="col-md-6 col-md-offset-3">
 			<h2>Questions (from Database)</h2><br>
 		</div>
-		<div class="col-md-8 col-md-offset-2">
+		<div class="col-md-6 col-md-offset-3">
 			<table class="table table-striped table-hover">
 				<thead> 
-					<th>q_ID</th>
-					<th>q_content</th>
-					<th>q_img</th>
-					<th>See Choices</th>
-					<th>Edit Questions</th>
+					<th>ID</th>
+					<th>Question</th>
+					<th>Image URL</th>
+					<th> Choices</th>
+					<th> Edit</th>
 					<th>Delete</th>
 				</thead>
 				<tbody>
@@ -85,7 +97,7 @@
 							<td>'.$rows['q_ID'].'</td>
 							<td>'.$rows['q_content'].'</td>
 							<td>'.$rows['q_img'].'</td>
-							<td><div align="center"><a class="btn btn-info" href="cuSquiz_detail.php?detail_id='.$rows['q_ID'].'">Choices</a></div></td>
+							<td><div align="center"><a class="btn btn-success" href="cuSquiz_detail.php?detail_id='.$rows['q_ID'].'">Choices</a></div></td>
 							<td><div align="center"><a class="btn btn-warning" href="cuSquiz_edit_questions.php?edit_id='.$rows['q_ID'].'">Edit</a></div></td>
 							<td><div align="center"><a class="btn btn-danger" href="cuSquiz.php?del_id='.$rows['q_ID'].'">Delete</a></div></td>
 
@@ -93,12 +105,10 @@
 						';
 					}
 					?>
-
-
 				</tbody>
 				
 			</table>
-			<a class="btn btn-success" href="cuSquiz_add_questions.php">Add Questions</a>
+			<a class="btn btn-info" href="cuSquiz_add_questions.php">Add Questions</a>
 			</div>
 		</div>
 	</div>

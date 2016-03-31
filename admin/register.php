@@ -95,8 +95,8 @@ if(isset($_POST['register'])){
   </nav>
 
   <div class="container">
-    <form action="register.php" method="post" style="margin-top:150px">
-      <h2>Register Here</h2>
+    <form action="register.php" method="post" style="margin-top:90px">
+      <h2>Register</h2>
       <?php
         if(isset($_GET['err'])){ ?>
           <div class="alert alert-danger"> <?php echo $_GET['err']; ?></div>
@@ -142,7 +142,7 @@ if(isset($_POST['register'])){
       </div>
 
 
-      <button type="submit" name="register" class="btn btn-default" >Register</button>
+      <button type="submit" name="register" class="btn btn-info" >Register</button>
     </form>
 
   </div><!-- /.container -->

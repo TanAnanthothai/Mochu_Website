@@ -88,23 +88,23 @@ if(isset($_GET['del_id'])){
 	<div class="container-fluid" style="margin-top:100px">
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-md-8 col-md-offset-2">
+				<div class="col-md-8 col-md-offset-1">
 				<h2>Users (from Database)</h2><br>
 				</div>
-				<div class="col-md-8 col-md-offset-2">
+				<div class="col-md-10 col-md-offset-1">
 
 					<table class="table table-striped">
 						<thead> 
-							<th>user_ID</th>
-							<th>Fname</th>
-							<th>Lname</th>
-							<th>email</th>
-							<th>gender</th>
-							<th>contact</th>
-							<th>Bday</th>
-							<th>last_login</th>
-							<th>edit</th>
-							<th>delete</th>
+							<th>ID</th>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>Email</th>
+							<th>Gender</th>
+							<th>Contact</th>
+							<th>Birth Date</th>
+							<th>Last Login</th>
+							<th>Edit</th>
+							<th>Delete</th>
 						</thead>
 
 						<tbody>

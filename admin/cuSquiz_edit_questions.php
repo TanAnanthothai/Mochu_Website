@@ -15,19 +15,6 @@
 			$q_content = '';
 			$q_img = '';
 	}
-
-	/////Edit Rows /////
-	if( (isset($_POST['edit_form']) )){
-		$q_ID = strip_tags($_POST['q_ID']);
-		$q_content = strip_tags($_POST['q_content']);
-		$q_img = strip_tags($_POST['q_img']);
-		//$ins_sql = "INSERT INTO AudioGuide (au_name, au_file, fl_IMG) VALUES ('$name', '$au_file', '$fl_IMG')" ;
-		$ins_sql = "UPDATE Questions SET q_content='$q_content', q_img='$q_img' WHERE q_ID = '$q_ID' " ;
-		$run_sql = mysqli_query($conn, $ins_sql);
-		header("Location:cuSquiz.php");
-	}else{
-		echo "this doesnt work";
-	}
 ?>
 
 
@@ -44,26 +31,50 @@
 		</style>
 	</head>
 	<body>
-		<div class="container">
-			<h1>Submit Form</h1>
-			<form class="form-horizontal" action="cuSquiz_edit_questions.php" method="post" role="form">
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+		    <div class="container">
+		      <div class="navbar-header">
+		        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+		          <span class="sr-only">Toggle navigation</span>
+		          <span class="icon-bar"></span>
+		          <span class="icon-bar"></span>
+		          <span class="icon-bar"></span>
+		        </button>
+		        <a class="navbar-brand" href="#">MOCHU</a>
+		      </div>
+		      <div id="navbar" class="collapse navbar-collapse">
+		        <ul class="nav navbar-nav">
+		          <li><a href="myaccount.php">My Account</a></li>
+		           <li><a href="users.php">Users</a></li>
+		          <li><a href="audioGuide.php">Audio Guide</a></li>
+		          <li class="active"><a href="cuSquiz.php">CU Squiz</a></li>
+		          <li><a href="events.php">Events</a></li>
+		          <li><a href="logout.php">Logout</a></li>
+		        </ul>
+		      </div><!--/.nav-collapse -->
+		    </div>
+		  </nav>
+
+		<div class="container" style="margin-top:100px">
+			<h1>Edit Question</h1>
+			<form class="form-horizontal" action="cuSquiz.php" method="post" role="form">
 				<div class="form-group">
-					<label for="q_content" class="control-label col-sm-2">Questions*</label>
+					<label for="q_content" class="control-label col-sm-2" style="margin-top:20px">Questions*</label>
 					<div class="col-sm-5">
-						<input type="text" id="q_content" class="form-control" value="<?php echo $q_content; ?>" placeholder="q_content Name" name="q_content" required>
+						<input type="text" id="q_content" class="form-control" style="margin-top:20px" value="<?php echo $q_content; ?>" placeholder="Edit Question" name="q_content" required>
  					</div>
 				</div>
 				<div class="form-group">
-					<label for="q_img" class="control-label col-sm-2">Question Img*</label>
+					<label for="q_img" class="control-label col-sm-2">Question Image*</label>
 					<div class="col-sm-5">
-						<input type="text" id="q_img" class="form-control" value="<?php echo $q_img; ?>" placeholder="q_img" name="q_img" required>
+						<input type="text" id="q_img" class="form-control" value="<?php echo $q_img; ?>" placeholder="q_img" name="Update" required>
  					</div>
 				</div>
 	
 				<div class="form-group">
 					<label class="control-label col-sm-2"></label>	
 					<div class="col-sm-5">
-						<input type="submit" class="btn btn-default btn-block" name="edit_form" value="Submit form">
+						<input type="submit" class="btn btn-info btn-block" name="edit_form" value="Submit">
 						<input name="q_ID" type="hidden" id="q_ID" value="<?=$_GET['edit_id']?>" />
 					</div>
 				</div>
