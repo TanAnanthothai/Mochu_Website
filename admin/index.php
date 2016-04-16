@@ -71,8 +71,9 @@ if(isset($_POST['login'])){
 
   <div class="container">
 
-    <form action="index.php" method="post" style="margin-top:150px">
+    <form action="index.php" method="post" style="margin-top:90px">
       <h2> Login </h2>
+      <hr>
       <?php if(isset($_GET['success'])) { ?>
         <div class="alert alert-success"> <?php echo $_GET['success']; ?> </div>
       <?php } ?>

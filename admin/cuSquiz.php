@@ -74,10 +74,11 @@
 
 	<div class="container-fluid" style="margin-top:100px">
 		<div class="row">
-		<div class="col-md-6 col-md-offset-3">
-			<h2>Questions (from Database)</h2><br>
+		<div class="col-md-10 col-md-offset-1">
+			<h2>Questions (from Database)</h2>
+			<hr><br>
 		</div>
-		<div class="col-md-6 col-md-offset-3">
+		<div class="col-md-10 col-md-offset-1">
 			<table class="table table-striped table-hover">
 				<thead> 
 					<th>ID</th>

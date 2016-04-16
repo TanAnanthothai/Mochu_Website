@@ -77,10 +77,11 @@
 	<div class="container-fluid" style="margin-top:100px">
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-md-8 col-md-offset-2">
-				<h2>Audio Guide (from Database)</h2><br>
+				<div class="col-md-10 col-md-offset-1">
+				<h2>Audio Guide (from Database)</h2>
+				<hr><br>
 				</div>
-				<div class="col-md-8 col-md-offset-2">
+				<div class="col-md-10 col-md-offset-1">
 
 					<table class="table table-striped">
 						<thead> 
