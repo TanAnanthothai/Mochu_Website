@@ -35,11 +35,20 @@ if(!isset($_SESSION['user_email'])){
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
           <li class="active"><a href="myaccount.php">My Account</a></li>
-          <li><a href="users.php">Users</a></li>
-          <li><a href="audioGuide.php">Audio Guide</a></li>
-          <li><a href="cuSquiz.php">CU Squiz</a></li>
-          <li><a href="events.php">Events</a></li>
-          <li><a href="logout.php">Logout</a></li>
+              <li><a href="managers.php">Managers</a></li>
+              <li><a href="members.php">Members</a></li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Personal Guide<span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="audioGuide.php">Audio Guide</a></li>
+                    <li><a href="contents.php">Contents</a></li>
+                 </ul>
+           </li>
+              <li><a href="cuSquiz.php">CU Squiz</a></li>
+              <li><a href="events.php">Events</a></li>
+              <li><a href="locations.php">Locations</a></li>
+              <li><a href="feedbacks.php">Feedbacks</a></li>
+              <li><a href="logout.php">Logout</a></li>
         </ul>
       </div><!--/.nav-collapse -->
     </div>
@@ -48,7 +57,26 @@ if(!isset($_SESSION['user_email'])){
   <div class="container" style="margin-top:100px">
     
     <div class="jumbotron">
-      <h2> Welcome <?php echo $_SESSION['user_email'] ?> </h2>
+      <?php 
+              $sql = "SELECT * FROM Users u, Managers m WHERE u.user_ID=m.user_ID AND u.email= '$_SESSION[user_email]'";
+              $run_sql = mysqli_query($conn,$sql);
+              while($rows = mysqli_fetch_assoc($run_sql)){
+                echo '<h2> Welcome '.$rows['Fname'].' '.$rows['Lname'].'</h2>';
+              }
+      ?>
+    </div>
+
+    <div class="container" style="margin-top:100px">
+      <?php 
+              $sql = "SELECT * FROM Users u, Managers m WHERE u.user_ID=m.user_ID AND u.email= '$_SESSION[user_email]'";
+              $run_sql = mysqli_query($conn,$sql);
+              while($rows = mysqli_fetch_assoc($run_sql)){
+                echo '
+                  <p> Email: '.$rows['email'].' </p></br>
+                  <p> Role: '.$rows['role'].' </p>
+                     ';
+              }
+      ?>
     </div>
 
   </div>

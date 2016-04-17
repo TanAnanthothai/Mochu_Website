@@ -7,32 +7,32 @@
 
 	/////DELETE Rows /////
 	if(isset($_GET['del_id'])){
-		$del_sql = "DELETE FROM AudioGuide WHERE au_ID = '$_GET[del_id]' ";
+		$del_sql = "DELETE FROM Contents WHERE content_ID = '$_GET[del_id]' ";
 		$run_sql = mysqli_query($conn,$del_sql);
 	}
 
 	/////Add Rows /////
 	if(isset($_POST['submit_form'])){
-		// $name = strip_tags($_POST['au_name']);
-		// $au_file = strip_tags($_POST['au_file']);
-		// $fl_IMG = strip_tags($_POST['fl_IMG']);
-		// $ins_sql = "INSERT INTO AudioGuide (au_name, au_file, fl_IMG) VALUES ('$name', '$au_file', '$fl_IMG')" ;
-		// $run_sql = mysqli_query($conn, $ins_sql);
-		// header("Location:audioGuide.php");
+		$content_title = strip_tags($_POST['content_title']);
+		$content_description = strip_tags($_POST['content_description']);
+		$created_date = strip_tags($_POST['created_date']);
+		$ins_sql = "INSERT INTO Contents (content_title, content_description, created_date) VALUES ('$content_title', '$content_description', '$created_date')" ;
+		$run_sql = mysqli_query($conn, $ins_sql);
+		header("Location:contents.php");
 	}else{
 		echo "this doesn't work";
 	}
 
 	/////Edit Rows /////
 	if( (isset($_POST['edit_form']) )){
-		$au_ID = strip_tags($_POST['au_ID']);
-		$name = strip_tags($_POST['au_name']);
-		$au_file = strip_tags($_POST['au_file']);
-		$fl_IMG = strip_tags($_POST['fl_IMG']);
+		$content_ID = strip_tags($_POST['content_ID']);
+		$content_title = strip_tags($_POST['content_title']);
+		$content_description = strip_tags($_POST['content_description']);
+		$created_date = strip_tags($_POST['created_date']);
 		//$ins_sql = "INSERT INTO AudioGuide (au_name, au_file, fl_IMG) VALUES ('$name', '$au_file', '$fl_IMG')" ;
-		$ins_sql = "UPDATE AudioGuide SET au_name='$name', au_file='$au_file', fl_IMG='$fl_IMG' WHERE au_ID = '$au_ID' " ;
+		$ins_sql = "UPDATE Contents SET content_title='$content_title', content_description='$content_description', created_date='$created_date' WHERE content_ID = '$content_ID' " ;
 		$run_sql = mysqli_query($conn, $ins_sql);
-		header("Location:audioGuide.php");
+		header("Location:contents.php");
 	}else{
 		echo "this doesn't work";
 	}
@@ -42,7 +42,7 @@
 ?>
 <html>
 <head>
-	<title> Audio Guide </title>
+	<title> Personal Guide Contents </title>
 	<script src="js/jquery.js"> </script>
 	<script src="bootstrap/js/bootstrap.js"> </script>
 	<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
@@ -68,8 +68,8 @@
           <li class="dropdown active">
           	<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Personal Guide<span class="caret"></span></a>
           		<ul class="dropdown-menu">
-		            <li class="active"><a href="audioGuide.php">Audio Guide</a></li>
-          			<li><a href="contents.php">Contents</a></li>
+		            <li><a href="audioGuide.php">Audio Guide</a></li>
+          			<li class="active"><a href="contents.php">Contents</a></li>
 		         </ul>
 		   </li>
           <li><a href="cuSquiz.php">CU Squiz</a></li>
@@ -87,33 +87,33 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-10 col-md-offset-1">
-				<h2>Audio Guide (from Database)</h2><br>
+				<h2>Contents (from Database)</h2><br>
 				</div>
 				<div class="col-md-10 col-md-offset-1">
 
 					<table class="table table-striped">
 						<thead> 
 							<th>ID</th>
-							<th>Name</th>
-							<th>Audio File</th>
-							<th>Image</th>
+							<th>Title</th>
+							<th>Description</th>
+							<th>Created Date</th>
 							<th>Edit</th>
 							<th>Delete</th>
 						</thead>
 
 						<tbody>
 							<?php 
-							$sql = "SELECT * FROM AudioGuide";
+							$sql = "SELECT * FROM Contents";
 							$run_sql = mysqli_query($conn,$sql);
 							while($rows = mysqli_fetch_assoc($run_sql)){
 								echo '
 								<tr> 
-									<td>'.$rows['au_ID'].'</td>
-									<td>'.$rows['au_name'].'</td>
-									<td>'.$rows['au_file'].'</td>
-									<td>'.$rows['fl_IMG'].'</td>
-									<td><a class="btn btn-warning" href="audioGuide_edit.php?edit_id='.$rows['au_ID'].'">Edit</a></td>
-									<td><a class="btn btn-danger" href="audioGuide.php?del_id='.$rows['au_ID'].'">Delete</a></td>
+									<td>'.$rows['content_ID'].'</td>
+									<td>'.$rows['content_title'].'</td>
+									<td>'.$rows['content_description'].'</td>
+									<td>'.$rows['created_date'].'</td>
+									<td><a class="btn btn-warning" href="contents_edit.php?edit_id='.$rows['content_ID'].'">Edit</a></td>
+									<td><a class="btn btn-danger" href="contents.php?del_id='.$rows['content_ID'].'">Delete</a></td>
 								</tr>
 								';
 							}
@@ -121,7 +121,7 @@
 
 						</tbody>
 					</table>
-					<td><a class="btn btn-info" href="audioGuide_add.php">Add New Audio Guide</a></td>	
+					<td><a class="btn btn-info" href="contents_add.php">Add New Content</a></td>	
 				</div>
 			</div>
 		</div>

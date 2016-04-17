@@ -1,15 +1,28 @@
 <!DOCTYPE html>
 <?php
-	$au_name = '';
-	$au_file = '';
-	$fl_IMG = '';
-	
+	include 'includes/db.php';
+	if(isset($_GET['edit_id'])) {
+		$edit_sql = "SELECT * FROM Contents WHERE content_ID = '$_GET[edit_id]'";
+		$run_sql = mysqli_query($conn,$edit_sql);
+
+		while ($rows = mysqli_fetch_assoc($run_sql)) {
+			$content_ID = $rows['content_ID'];
+			$content_title = $rows['content_title'];
+			$content_description = $rows['content_description'];
+			$created_date =	$rows['created_date'];
+		} 
+	}else{
+			$content_ID = '';
+			$content_title = '';
+			$content_description = '';
+			$created_date = '';
+	}
 ?>
 
 
 <html>
 	<head>
-		<title>Add Audio Guide</title>
+		<title>Edit Content</title>
 		<script src="js/jquery.js"> </script>
 		<script src="bootstrap/js/bootstrap.js"> </script>
 		<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
@@ -40,8 +53,8 @@
           <li class="dropdown active">
           	<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Personal Guide<span class="caret"></span></a>
           		<ul class="dropdown-menu">
-		            <li class="active"><a href="audioGuide.php">Audio Guide</a></li>
-          			<li><a href="contents.php">Contents</a></li>
+		            <li><a href="audioGuide.php">Audio Guide</a></li>
+          			<li class="active"><a href="contents.php">Contents</a></li>
 		         </ul>
 		   </li>
           <li><a href="cuSquiz.php">CU Squiz</a></li>
@@ -55,59 +68,36 @@
   </nav>
 
 		<div class="container" style="margin-top:100px">
-			<h1>Add New Audio Guide</h1>
-			<form class="form-horizontal" action="upload.php" method="post" role="form" enctype="multipart/form-data">
+			<h1>Edit Content</h1>
+			<form class="form-horizontal" action="contents.php" method="post" role="form">
 				<div class="form-group">
-					<label for="name" class="control-label col-sm-2" style="margin-top:20px">Audio Guide Name*</label>
+					<label for="name" class="control-label col-sm-2" style="margin-top:20px">Content Title*</label>
 					<div class="col-sm-5">
-						<input type="text" id="au_name" class="form-control" style="margin-top:20px" value="<?php echo $au_name; ?>" placeholder="Enter audio guide name" name="au_name" required>
+						<input type="text" id="content_title" class="form-control" style="margin-top:20px" value="<?php echo $content_title; ?>" placeholder="Enter content title" name="content_title" required>
  					</div>
 				</div>
 				<div class="form-group">
-					<label for="au_file" class="control-label col-sm-2">Audio Guide File*</label>
+					<label for="content_description" class="control-label col-sm-2">Content Description*</label>
 					<div class="col-sm-5">
-						<input type="file" id="au_file" class="form-control" value="<?php echo $au_file; ?>" placeholder="Update button" name="au_file" required>
+						<input type="text" id="content_description" class="form-control" value="<?php echo $content_description; ?>" placeholder="Enter content description" name="content_description" required>
  					</div>
 				</div>
 				<div class="form-group">
-					<label for="fl_IMG" class="control-label col-sm-2">Audio Guide Image*</label>
+					<label for="created_date" class="control-label col-sm-2">Created Date*</label>
 					<div class="col-sm-5">
-						<input type="file" id="fl_IMG" class="form-control" value="<?php echo $fl_IMG; ?>" placeholder="Update button" name="fl_IMG" required>
+						<input type="text" id="created_date" class="form-control" value="<?php echo $created_date; ?>" placeholder="YYYY-MM-DD" name="created_date" required>
  					</div>
 				</div>
-	
-			
+
+
 				<div class="form-group">
 					<label class="control-label col-sm-2"></label>	
 					<div class="col-sm-5">
-						<input type="submit" class="btn btn-info btn-block" name="btn-upload" value="upload files">
-
+						<input type="submit" class="btn btn-info btn-block" name="edit_form" value="Submit">
+						<input name="content_ID" type="hidden" id="content_ID" value="<?=$_GET['edit_id']?>" />
 					</div>
 				</div>
 			</form>
-
-				<!-- image upload result -->
-					<br /><br />
-					 <?php
-						 if(isset($_GET['success']))
-						 {
-						  ?>
-						        <label>File Uploaded Successfully... </label>
-						        <?php
-						 }
-						 else if(isset($_GET['fail']))
-						 {
-						  ?>
-						        <label>Problem While File Uploading !</label>
-						        <?php
-						 }
-						 else
-						 {
-						  ?>
-						        <!-- <label>Try to upload any files(PDF, DOC, EXE, VIDEO, MP3, ZIP,etc...)</label> -->
-						        <?php
-						 }
-					?>
 		</div>
 	</body>
 </html>

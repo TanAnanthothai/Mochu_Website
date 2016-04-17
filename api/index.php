@@ -23,8 +23,11 @@ $app->put('/users/:id', 'updateUser');
 $app->post('/users/cusquiz/:id', 'updateQuizScore');
 $app->delete('/users/:id',	'deleteUser');
 $app->get('/events', 'getEvents');
+$app->get('/events/:id', 'getEvent');
 $app->get('/questions', 'getQuestions');
 $app->get('/audioGuides', 'getAudioGuides');
+$app->get('/nisitify/:id', 'getNisitify');
+$app->post('/feedbacks/submit', 'addFeedback');
 
 $app->run();
 
@@ -179,7 +182,7 @@ function addTest() {
 		$db = null;
 		echo json_encode($users); 
 	} catch(PDOException $e) {
-		error_log($e->getMessage(), 3, '/var/tmp/php.log');
+		erdror_log($e->getMessage(), 3, '/var/tmp/php.log');
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}
 }
@@ -307,6 +310,25 @@ function getEvents() {
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}
 }
+
+function getEvent($id) {
+	$sql = "SELECT e.event_ID, e.start_time, e.Edate, e.end_time, e.contact, e.name, e.description, e.organizer, e.picture, e.type, 
+           l.loc_ID, l.loc_name, l.total_seats, l.room_no, l.fl_no, l.bldg
+		   FROM Events e, Locations l
+		   WHERE e.loc_ID=l.loc_ID AND e.event_ID=$id";
+	try {
+		$db = getConnection();
+		$stmt = $db->prepare($sql);  
+		$stmt->bindParam("event_ID", $id);
+		$stmt->execute();
+		$id = $stmt->fetchObject();  
+		$db = null;
+		echo json_encode($id); 
+	} catch(PDOException $e) {
+		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
+}
+
 /*
 ---------------
 Questions API
@@ -341,6 +363,68 @@ function getAudioGuides() {
 	} catch(PDOException $e) {
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}
+}
+/*
+---------------------
+Nisitify API
+---------------------
+*/
+function getNisitify($id) {
+	$sql = "SELECT flt_IMG FROM Filters WHERE flt_ID=$id";
+	try {
+		$db = getConnection();
+		$stmt = $db->query($sql);  
+		$filters = $stmt->fetchAll(PDO::FETCH_OBJ);
+		$db = null;
+		echo json_encode($filters, JSON_UNESCAPED_SLASHES);
+	} catch(PDOException $e) {
+		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
+}
+/*
+---------------------
+Feedback API
+---------------------
+*/
+function addFeedback() {
+	error_log('addFeedback\n', 3, '/var/tmp/php.log');
+	$request = Slim::getInstance()->request();
+	//$users = json_decode($request->getBody());
+	$msg=$_POST['msg'];
+	$rating=$_POST['rating'];
+	$sql = "INSERT INTO Feedbacks (msg,rating) VALUES ('$msg','$rating')" ;
+
+	try {
+		$db = getConnection();
+		$stmt = $db->prepare($sql); 
+		$stmt->bindParam("msg", $filters->msg);
+		$stmt->bindParam("rating", $filters->rating);
+		$stmt->execute();
+		$filters->id = $db->lastInsertId();
+		echo json_encode($stmt); 
+		$last_ID = $db->lastInsertId();
+		echo "Last ID: ".$last_ID;
+		$db = null;
+		//echo '{"Success":{"text":'. "POST success" .'}}'; 
+	} catch(PDOException $e) {
+		error_log($e->getMessage(), 3, '/var/tmp/php.log');
+		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
+
+	// $sql1="INSERT INTO Members (occupation) VALUES('$occupation', (SELECT user_ID from Users where user_ID='$user_ID'))";
+	// try {
+	// 	$db = getConnection();
+	// 	$stmt = $db->prepare($sql1); 
+	// 	$stmt->bindParam("occupation", $members->occupation);
+	// 	$stmt->execute();
+	// 	// $members->id = $db->lastInsertId();
+	// 	$db = null;
+	// 	echo json_encode($members); 
+	// 	//echo '{"Success":{"text":'. "POST success" .'}}'; 
+	// } catch(PDOException $e) {
+	// 	error_log($e->getMessage(), 3, '/var/tmp/php.log');
+	// 	echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	// }
 }
 
 ?>

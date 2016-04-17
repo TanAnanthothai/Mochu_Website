@@ -43,10 +43,19 @@
 		      <div id="navbar" class="collapse navbar-collapse">
 		        <ul class="nav navbar-nav">
 		          <li><a href="myaccount.php">My Account</a></li>
-		           <li><a href="users.php">Users</a></li>
-		          <li><a href="audioGuide.php">Audio Guide</a></li>
+		          <li><a href="managers.php">Managers</a></li>
+		          <li><a href="members.php">Members</a></li>
+		          <li class="dropdown">
+		          	<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Personal Guide<span class="caret"></span></a>
+		          		<ul class="dropdown-menu">
+				            <li><a href="audioGuide.php">Audio Guide</a></li>
+		          			<li><a href="contents.php">Contents</a></li>
+				         </ul>
+				   </li>
 		          <li class="active"><a href="cuSquiz.php">CU Squiz</a></li>
 		          <li><a href="events.php">Events</a></li>
+		          <li><a href="locations.php">Locations</a></li>
+		          <li><a href="feedbacks.php">Feedbacks</a></li>
 		          <li><a href="logout.php">Logout</a></li>
 		        </ul>
 		      </div><!--/.nav-collapse -->
@@ -57,7 +66,7 @@
 			<h1>Add New Question</h1>
 			<form class="form-horizontal" action="cuSquiz.php" method="post" role="form">
 				<div class="form-group">
-					<label for="q_content" class="control-label col-sm-2" style="margin-top:20px">Questions*</label>
+					<label for="q_content" class="control-label col-sm-2" style="margin-top:20px">Question*</label>
 					<div class="col-sm-5">
 						<input type="text" id="q_content" class="form-control" style="margin-top:20px" value="<?php echo $q_content; ?>" placeholder="Enter new question" name="q_content" required>
  					</div>
@@ -65,7 +74,7 @@
 				<div class="form-group">
 					<label for="q_img" class="control-label col-sm-2">Question Image*</label>
 					<div class="col-sm-5">
-						<input type="text" id="q_img" class="form-control" value="<?php echo $q_img; ?>" placeholder="Update" name="q_img" required>
+						<input type="text" id="q_img" class="form-control" value="<?php echo $q_img; ?>" placeholder="Update button" name="q_img" required>
  					</div>
 				</div>
 	

@@ -16,7 +16,7 @@ if(isset($_POST['login'])){
   $email = mysqli_real_escape_string($conn, $_POST['email']);
   $password = mysqli_real_escape_string($conn, $_POST['password']);
 
-  $query = "SELECT * FROM Users WHERE email='$email' and password='$password' ";
+  $query = "SELECT * FROM Users u, Managers m WHERE u.user_ID=m.user_ID and u.email='$email' and u.password='$password' ";
 
   $result = $conn->query($query);
 
@@ -43,7 +43,7 @@ if(isset($_POST['login'])){
 
 <html>
 <head>
-  <title> Index & Login</title>
+  <title> Admin Web Sign In</title>
   <script src="js/jquery.js"> </script>
   <script src="bootstrap/js/bootstrap.js"> </script>
   <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
@@ -63,7 +63,6 @@ if(isset($_POST['login'])){
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
           <li class="active"><a href="index.php">Login</a></li>
-          <li><a href="register.php">Register</a></li>
         </ul>
       </div><!--/.nav-collapse -->
     </div>
@@ -71,9 +70,8 @@ if(isset($_POST['login'])){
 
   <div class="container">
 
-    <form action="index.php" method="post" style="margin-top:90px">
+    <form action="index.php" method="post" style="margin-top:150px">
       <h2> Login </h2>
-      <hr>
       <?php if(isset($_GET['success'])) { ?>
         <div class="alert alert-success"> <?php echo $_GET['success']; ?> </div>
       <?php } ?>
