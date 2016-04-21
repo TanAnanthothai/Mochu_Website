@@ -18,6 +18,7 @@ $app->get('/users/:email','getUser');
 $app->post('/users/login', 'login');
 $app->post('/users', 'addUser');
 $app->post('/users/forgetPW', 'forget_password');
+$app->post('/users/tickets','getTickets');
 $app->post('/tests', 'addTest');
 $app->put('/users/:id', 'updateUser');
 $app->post('/users/cusquiz/:id', 'updateQuizScore');
@@ -28,6 +29,8 @@ $app->get('/questions', 'getQuestions');
 $app->get('/audioGuides', 'getAudioGuides');
 $app->get('/nisitify/:id', 'getNisitify');
 $app->post('/feedbacks/submit', 'addFeedback');
+$app->get('/aboutUs','getContents');
+$app->post('/reservations/delete',	'deleteReservation');
 
 $app->run();
 
@@ -289,6 +292,23 @@ function forget_password() {
         echo '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
+
+function getTickets() {
+	$request = Slim::getInstance()->request();
+    $userID = $_POST['user_ID'];
+	$sql = "SELECT e.name AS 'Name', l.loc_name AS Venue, e.start_time AS Time, e.Edate AS 'Date', s.seat_no AS Seat_no
+	FROM Events e, Locations l, Seat_Instance s, Reservations r
+	WHERE r.user_ID = $userID AND r.rsv_ID = s.rsv_ID AND s.event_ID = e.event_ID AND e.loc_ID = l.loc_ID;";
+	try {
+		$db = getConnection();
+		$stmt = $db->query($sql);  
+		$tickets = $stmt->fetchAll(PDO::FETCH_OBJ);
+		$db = null;
+		echo json_encode($tickets);
+	} catch(PDOException $e) {
+		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
+}
 /*
 -----------
 Events API
@@ -299,7 +319,7 @@ function getEvents() {
            l.loc_ID, l.loc_name, l.total_seats, l.room_no, l.fl_no, l.bldg
            FROM Events e, Locations l
            WHERE e.loc_ID=l.loc_ID
-           ORDER BY e.event_ID ASC';
+           ORDER BY e.name ASC';
 	try {
 		$db = getConnection();
 		$stmt = $db->query($sql);  
@@ -425,6 +445,44 @@ function addFeedback() {
 	// 	error_log($e->getMessage(), 3, '/var/tmp/php.log');
 	// 	echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	// }
+}
+/*
+---------------------
+About Us
+---------------------
+*/
+function getContents() {
+	$sql = "SELECT content_ID, content_title, content_description, created_date, content_IMG, location, contact, hours FROM Contents";
+	try {
+		$db = getConnection();
+		$stmt = $db->query($sql);  
+		$filters = $stmt->fetchAll(PDO::FETCH_OBJ);
+		$db = null;
+		echo json_encode($filters, JSON_UNESCAPED_SLASHES);
+	} catch(PDOException $e) {
+		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
+}
+/*
+---------------------
+Reservations
+---------------------
+*/
+function deleteReservation() {
+	$request = Slim::getInstance()->request();
+	$rsvID = $_POST['rsv_ID'];
+	$sql = "DELETE FROM Reservations WHERE rsv_ID=$rsvID";
+	try {
+		$db = getConnection();
+		$stmt = $db->prepare($sql);  
+		$stmt->execute();
+		
+		echo "deleted"; 
+		$db = null;
+		
+	} catch(PDOException $e) {
+		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
 }
 
 ?>
