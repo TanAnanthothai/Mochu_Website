@@ -298,7 +298,7 @@ function forget_password() {
 function getTickets() {
 	$request = Slim::getInstance()->request();
     $userID = $_POST['user_ID'];
-	$sql = "SELECT e.name AS 'Name', l.loc_name AS Venue, e.start_time AS Time, e.Edate AS 'Date', s.seat_no AS Seat_no
+	$sql = "SELECT r.rsv_ID AS rsv_ID, e.name AS 'Name', l.loc_name AS Venue, e.start_time AS Time, e.Edate AS 'Date', s.seat_no AS Seat_no
 	FROM Events e, Locations l, Seat_Instance s, Reservations r
 	WHERE r.user_ID = $userID AND r.rsv_ID = s.rsv_ID AND s.event_ID = e.event_ID AND e.loc_ID = l.loc_ID;";
 	try {
@@ -492,14 +492,21 @@ function getAvailableSeat() {
 Insert Seat
 ---------------------
 */
-//dont forget to write on top
 function insertSeat(){
 	error_log('insertSeat\n', 3, '/var/tmp/php.log');
 	$request = Slim::getInstance()->request();
 	$event_ID=$_POST['event_ID'];
 	$user_ID=$_POST['user_ID'];
-	echo $user_ID;
+	$seat_no=$_POST['seat_no'];
+	$count=count($seat_no);
+	echo "Event ID: ";
 	echo $event_ID;
+	echo "User ID: ";
+	echo $user_ID;
+	echo "Seat No.: ";
+	echo $seat_no;
+	echo "count is: ";
+	echo $count;
 	$sql = "INSERT INTO Reservations (user_ID) VALUES ('$user_ID')";
 	try {
 		$db = getConnection();
@@ -512,6 +519,13 @@ function insertSeat(){
 		echo "Last ID: ".$last_ID;
 		$db = null;
 		echo '{"Success":{"text":'. "POST success" .'}}'; 
+		//insert into seat_instance
+		 // $db1 = getConnection();
+		 // $sql1="UPDATE Seat_Instance SET status=1 WHERE seat_no=$seat_no AND event_ID=$event_ID";
+		 // $stmt1 = $db1->prepare($sql1); 
+		 // $stmt1->bindParam("status", $members->status);
+		 // $stmt1->execute();
+		 // $db1 = null;
 	} catch(PDOException $e) {
 		error_log($e->getMessage(), 3, '/var/tmp/php.log');
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
