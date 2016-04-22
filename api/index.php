@@ -31,6 +31,8 @@ $app->get('/nisitify/:id', 'getNisitify');
 $app->post('/feedbacks/submit', 'addFeedback');
 $app->get('/aboutUs','getContents');
 $app->post('/reservations/delete',	'deleteReservation');
+$app->post('/reservations/seat',	'getAvailableSeat');
+$app->post('/seat', 'insertSeat');
 
 $app->run();
 
@@ -446,23 +448,7 @@ function addFeedback() {
 	// 	echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	// }
 }
-/*
----------------------
-About Us
----------------------
-*/
-function getContents() {
-	$sql = "SELECT content_ID, content_title, content_description, created_date, content_IMG, location, contact, hours FROM Contents";
-	try {
-		$db = getConnection();
-		$stmt = $db->query($sql);  
-		$filters = $stmt->fetchAll(PDO::FETCH_OBJ);
-		$db = null;
-		echo json_encode($filters, JSON_UNESCAPED_SLASHES);
-	} catch(PDOException $e) {
-		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
-	}
-}
+
 /*
 ---------------------
 Reservations
@@ -481,6 +467,53 @@ function deleteReservation() {
 		$db = null;
 		
 	} catch(PDOException $e) {
+		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
+}
+
+function getAvailableSeat() {
+	$request = Slim::getInstance()->request();
+	$eventID = $_POST['event_ID'];
+	$sql = "SELECT status FROM Seat_Instance WHERE event_ID=$eventID ORDER BY seat_no ASC;";
+	try {
+		$db = getConnection();
+		$stmt = $db->prepare($sql);  
+		$stmt->execute();
+		$seats = $stmt->fetchAll(PDO::FETCH_OBJ);
+		$db = null;
+		echo json_encode($seats, JSON_UNESCAPED_SLASHES);
+		
+	} catch(PDOException $e) {
+		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
+}
+/*
+---------------------
+Insert Seat
+---------------------
+*/
+//dont forget to write on top
+function insertSeat(){
+	error_log('insertSeat\n', 3, '/var/tmp/php.log');
+	$request = Slim::getInstance()->request();
+	$event_ID=$_POST['event_ID'];
+	$user_ID=$_POST['user_ID'];
+	echo $user_ID;
+	echo $event_ID;
+	$sql = "INSERT INTO Reservations (user_ID) VALUES ('$user_ID')";
+	try {
+		$db = getConnection();
+		$stmt = $db->prepare($sql); 
+		$stmt->bindParam("user_ID", $filters->user_ID);
+		$stmt->execute();
+		$filters->id = $db->lastInsertId();
+		echo json_encode($stmt); 
+		$last_ID = $db->lastInsertId();
+		echo "Last ID: ".$last_ID;
+		$db = null;
+		echo '{"Success":{"text":'. "POST success" .'}}'; 
+	} catch(PDOException $e) {
+		error_log($e->getMessage(), 3, '/var/tmp/php.log');
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}
 }
